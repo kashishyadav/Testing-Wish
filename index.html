@@ -39,6 +39,22 @@
         pointer-events: none;
         z-index: -1;
     }
+    .surprise-button {
+        background: none;
+        border: 2px solid #fff;
+        color: #fff;
+        padding: 15px 30px;
+        font-size: 1.2em;
+        border-radius: 30px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none; /* Removes underline from the link */
+        margin-top: 30px;
+        display: inline-block;
+    }
+    .surprise-button:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
 </style>
 </head>
 <body>
@@ -46,6 +62,7 @@
 <h1>🎂 Happy Birthday, Friend! 🎉</h1>
 <img src="https://i.ibb.co/7r6mC0k/birthday.jpg" alt="Birthday Image">
 <p>Wishing you a day filled with love, laughter, and happiness! ❤️</p>
+<a href="surprise.html" class="surprise-button">Special Surprise Awaiting Ahead!</a>
 
 <canvas class="balloons"></canvas>
 

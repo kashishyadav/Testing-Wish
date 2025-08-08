@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -79,6 +79,216 @@
     <img src="images/img4.jpeg" alt="Memory 4">
     <img src="images/img5.jpeg" alt="Memory 5">
 </div>
+
+<script>
+    const canvas = document.getElementById("fireworks-canvas");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    let particles = [];
+    const fireworkInterval = setInterval(createFirework, 800);
+
+    function createFirework() {
+        const x = Math.random() * canvas.width;
+        const y = canvas.height;
+        const color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+        const speedY = Math.random() * 5 + 7;
+
+        particles.push({ x, y, color, speedY, life: 1, isRocket: true, vx: 0, vy: 0 });
+    }
+
+    function updateParticles() {
+        ctx.fillStyle = 'rgba(26, 26, 26, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = particles.length - 1; i >= 0; i--) {
+            let p = particles[i];
+
+            if (p.isRocket) {
+                p.y -= p.speedY;
+                if (p.y <= canvas.height / 3 + Math.random() * 100) {
+                    explode(p);
+                    particles.splice(i, 1);
+                }
+            } else {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.05;
+                p.life -= 0.015;
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+        }
+    }
+
+    function explode(firework) {
+        const numParticles = 200;
+        for (let i = 0; i < numParticles; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = Math.random() * 8 + 4;
+            particles.push({
+                x: firework.x,
+                y: firework.y,
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                color: firework.color,
+                life: 1,
+                isRocket: false
+            });
+        }
+    }
+
+    function draw() {
+        particles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.isRocket ? 3 : 2, 0, Math.PI * 2);
+            ctx.fillStyle = p.isRocket ? p.color : `rgba(${p.color.match(/\d+/g).join(',')}, ${p.life})`;
+            ctx.fill();
+        });
+    }
+
+    function animate() {
+        updateParticles();
+        draw();
+        requestAnimationFrame(animate);
+    }
+    animate();
+</script>
+
+</body>
+</html>
+ -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Special Surprise! 🎆</title>
+<style>
+    body {
+        background-color: #1a1a1a;
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        color: #fff;
+        overflow-x: hidden;
+        margin: 0;
+        padding: 0;
+    }
+    h1 {
+        font-size: 3em;
+        margin-top: 50px;
+        color: #ffcc00;
+        text-shadow: 0 0 15px #ffcc00, 0 0 25px #ffcc00, 0 0 35px #ffcc00;
+        animation: glow 2s infinite alternate;
+        z-index: 20; /* Ensure text is above all other content */
+        position: relative;
+    }
+    @keyframes glow {
+        from {
+            text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00;
+        }
+        to {
+            text-shadow: 0 0 20px #ffcc00, 0 0 30px #ffcc00, 0 0 40px #ffcc00;
+        }
+    }
+    p {
+        font-size: 1.5em;
+        margin-top: 20px;
+        color: #f0f0f0;
+        z-index: 20; /* Ensure text is above all other content */
+        position: relative;
+    }
+    .image-scroll-container {
+        max-height: 50vh; /* Set a maximum height for the scrolling area */
+        max-width: 90%;
+        margin: 40px auto;
+        overflow-y: auto; /* Enable vertical scrolling */
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        border-radius: 20px;
+        background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent background for images */
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        z-index: 10;
+        position: relative;
+    }
+    .image-scroll-container::-webkit-scrollbar {
+        width: 10px;
+    }
+    .image-scroll-container::-webkit-scrollbar-thumb {
+        background-color: #555;
+        border-radius: 5px;
+    }
+    .image-scroll-container::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .image-block {
+        margin: 20px 0;
+        padding: 10px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transform: scale(0.95);
+        transition: transform 0.3s ease-in-out;
+    }
+    .image-block:hover {
+        transform: scale(1);
+    }
+    .image-block img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        object-fit: cover;
+    }
+    .image-block p {
+        font-size: 1.2em;
+        margin-top: 10px;
+        color: #e0e0e0;
+        text-shadow: 0 0 5px #000;
+        font-style: italic;
+    }
+    #fireworks-canvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-color: rgba(0, 0, 0, 0.1);
+    }
+</style>
+</head>
+<body>
+
+<canvas id="fireworks-canvas"></canvas>
+
+<h1>🎉 Surprise! A special gift for you! 🎁</h1>
+<p>Here are some memories we've shared. More adventures await!</p>
+
+<div class="image-scroll-container">
+    <div class="image-block">
+        <img src="images/img1.jpeg" alt="A lovely day out">
+        <p>A fun time at the park! What a great memory.</p>
+    </div>
+    <div class="image-block">
+        <img src="images/img2.jpeg" alt="Vacation photo">
+        <p>Remember our trip? I'll never forget it.</p>
+    </div>
+    <div class="image-block">
+        <img src="images/img3.jpeg" alt="Group photo">
+        <p>A night out with all our friends!</p>
+    </div>
+    <div class="image-block">
+        <img src="images/img4.jpeg" alt="Hiking adventure">
+        <p>You have an amazing spirit for adventure!</p>
+    </div>
+    <div class="image-block">
+        <img src="images/img5.jpeg" alt="Birthday celebration">
+        <p>Celebrating you is my favorite thing to do. ❤️</p>
+    </div>
+    </div>
 
 <script>
     const canvas = document.getElementById("fireworks-canvas");

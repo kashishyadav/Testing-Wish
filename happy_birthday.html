@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 🎉</title>
+<style>
+    body {
+        background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+        font-family: 'Arial', sans-serif;
+        text-align: center;
+        color: #fff;
+        overflow-x: hidden;
+    }
+    h1 {
+        font-size: 3em;
+        margin-top: 50px;
+        animation: bounce 1.5s infinite;
+    }
+    @keyframes bounce {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+    img {
+        width: 250px;
+        border-radius: 15px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        margin: 20px 0;
+    }
+    p {
+        font-size: 1.5em;
+        margin-top: 20px;
+    }
+    .balloons {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        z-index: -1;
+    }
+</style>
+</head>
+<body>
+
+<h1>🎂 Happy Birthday, Friend! 🎉</h1>
+<img src="https://i.ibb.co/7r6mC0k/birthday.jpg" alt="Birthday Image">
+<p>Wishing you a day filled with love, laughter, and happiness! ❤️</p>
+
+<canvas class="balloons"></canvas>
+
+<script>
+    // Balloons animation
+    const canvas = document.querySelector(".balloons");
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const balloons = [];
+    for (let i = 0; i < 20; i++) {
+        balloons.push({
+            x: Math.random() * canvas.width,
+            y: canvas.height + Math.random() * canvas.height,
+            r: 20 + Math.random() * 30,
+            color: `hsl(${Math.random() * 360}, 70%, 60%)`,
+            speed: 1 + Math.random() * 3
+        });
+    }
+
+    function drawBalloons() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        balloons.forEach(balloon => {
+            ctx.beginPath();
+            ctx.arc(balloon.x, balloon.y, balloon.r, 0, Math.PI * 2);
+            ctx.fillStyle = balloon.color;
+            ctx.fill();
+            balloon.y -= balloon.speed;
+            if (balloon.y + balloon.r < 0) {
+                balloon.y = canvas.height + balloon.r;
+                balloon.x = Math.random() * canvas.width;
+            }
+        });
+        requestAnimationFrame(drawBalloons);
+    }
+    drawBalloons();
+</script>
+
+</body>
+</html>
